@@ -29,12 +29,12 @@ public class Hiker {
         this.id = id;
     }
 
-    public Throwable getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public LocalTime getStart() {

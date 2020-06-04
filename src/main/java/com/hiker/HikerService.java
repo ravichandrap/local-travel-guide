@@ -9,7 +9,7 @@ public class HikerService {
 static final Logger logger = Logger.getLogger(HikerService.class);
 
     public Hiker create(Hiker hiker) {
-        logger.info("Hiker has created: ", hiker.getName());
+        logger.info("Hiker has created: "+ hiker.getName());
         return hiker;
     }
 
