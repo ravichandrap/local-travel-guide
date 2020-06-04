@@ -1,18 +1,28 @@
 package com.hiker.entity;
 
-import java.time.LocalTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Entity
 public class Hiker {
-    private int id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
-    private LocalTime start;
-    private LocalTime end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int age;
     private double price;
 
     public Hiker() {}
 
-    public Hiker(int id, String name, LocalTime start, LocalTime end, int age, double price) {
+    public Hiker(Long id, String name, LocalDateTime start, LocalDateTime end, int age, double price) {
         this.id = id;
         this.name = name;
         this.start = start;
@@ -21,11 +31,11 @@ public class Hiker {
         this.price = price;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,19 +47,21 @@ public class Hiker {
         return name;
     }
 
-    public LocalTime getStart() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(LocalTime start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public LocalTime getEnd() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(LocalTime end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -67,6 +79,24 @@ public class Hiker {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hiker hiker = (Hiker) o;
+        return age == hiker.age &&
+                Double.compare(hiker.price, price) == 0 &&
+                Objects.equals(id, hiker.id) &&
+                Objects.equals(name, hiker.name) &&
+                Objects.equals(start, hiker.start) &&
+                Objects.equals(end, hiker.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, start, end, age, price);
     }
 
     @Override

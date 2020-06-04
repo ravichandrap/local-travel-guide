@@ -1,12 +1,16 @@
 package com.hiker;
 
 import com.hiker.entity.Hiker;
-import com.hiker.util.HikerException;
+import com.hiker.repository.HikerRepository;
+import com.hiker.util.HikerNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("hiker")
@@ -14,40 +18,35 @@ public class HikerController {
     static final Logger logger = Logger.getLogger(HikerController.class);
 
     @Autowired
-    private HikerService service;
+    private HikerRepository repository;
 
     @PostMapping
     public Hiker create(@RequestBody Hiker hiker) {
         System.out.println(hiker.toString());
-        return service.create(hiker);
+        return repository.save(hiker);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancel(@PathVariable int id) {
+    @GetMapping("/id/{id}")
+    public Hiker viewById(@PathVariable Long id) {
         logger.info("Fetching & Deleting Hiker with id :"+ id);
-
-        Hiker hiker = service.findById(id);
-        if(hiker == null) {
-            return new ResponseEntity<>(new HikerException("Unable to delete. Hiker records with id: "
-                    + id + " not found"), HttpStatus.NOT_FOUND);
-        }
-        service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return repository.findById(id).orElseThrow(()-> new HikerNotFoundException(id));
+    }
+    @GetMapping("/date/{from}")
+    public List<Hiker>  viewByDate(@PathVariable LocalDateTime from) {
+        logger.info("Fetching Hiker by Date :"+ from);
+         return repository.findByStart(from);
     }
 
     @GetMapping
-    public String view() {
-
-        return "Hello world Hiker: View";
+    public List<Hiker> view() {
+        return (List<Hiker>) repository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> viewById(@PathVariable int id) {
-        Hiker hiker = service.findById(id);
-        if(hiker == null) {
-            return new ResponseEntity<>(new HikerException("Unable to delete. Hiker records with id: "
-                    + id + " not found"), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(hiker, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancel(@PathVariable Long id) {
+        logger.info("Fetching & Deleting Hiker with id :"+ id);
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
+
 }
