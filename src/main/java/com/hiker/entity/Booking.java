@@ -1,21 +1,26 @@
 package com.hiker.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-public class Booking {
+public class Booking implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private int status;
     private Long trailId;
 
-//    @OneToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "trail_id", nullable = false)
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="trailId", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "trailId", nullable = false, insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Trail trail;
 
     public Long getTrailId() {
@@ -64,7 +69,6 @@ public class Booking {
                 "id=" + id +
                 ", date=" + date +
                 ", status=" + status +
-                ", trailId=" + trailId +
                 ", trail=" + trail +
                 '}';
     }

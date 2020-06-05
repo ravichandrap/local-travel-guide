@@ -4,14 +4,15 @@ import com.hiker.BookingRequest;
 import com.hiker.entity.Booking;
 import com.hiker.entity.Trail;
 import com.hiker.entity.User;
+import com.hiker.exception.BookingException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -26,29 +27,9 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
-    public void booking(BookingRequest bookingRequest) throws Exception {
-        final String name = bookingRequest.getTrail();
-//        Trail trail = trailRepo.findByName(name).orElseThrow(()->new TrailNotFoundException(name));
-        List<Trail> trails = trailRepo.findAll();
-        trails.forEach(t->{
-            System.out.println("-------"+t.toString());
-        });
-        Trail trail = trailRepo.findByName(name).orElseThrow(()->new Exception(""));
-        User[] users = bookingRequest.getUsers();
-        Arrays.stream(users).forEach(u->{
-            if(!(u.getAge() >= trail.getMinAge() && u.getAge() <= trail.getMaxAge() )) {
-                    //throw  new RuntimeException("User age criteria is not match!");
-                    logger.error("User age criteria is not match!");
-            }
-        });
-        List<User> userList = new ArrayList<>(users.length);
-        Arrays.stream(users).forEach(u->{
-//            u.setBookingId(booking.getId());
-            u.setBookings(null);
-            userList.add(u);
-
-        });
-        List<User> l = userRepository.saveAll(userList);
+    public void createBooking(BookingRequest bookingRequest) {
+        Trail trail = isTrailExits(bookingRequest.getTrail());
+        bookingRequestValidation(trail, bookingRequest.getUsers());
 
         Booking booking = new Booking();
         booking.setDate(bookingRequest.getBookingDate());
@@ -56,24 +37,59 @@ public class BookingService {
         booking.setTrailId(trail.getId());
         Booking b = bookingRepo.save(booking);
 
-        l.forEach(u->{
+        User[] users = bookingRequest.getUsers();
+        Arrays.stream(users).forEach(u -> {
             u.setBookingId(b.getId());
             userRepository.save(u);
         });
-
     }
 
-    public void cancel(Long id) {
+    private Trail isTrailExits(String name) {
+        return trailRepo.findByName(name).orElseThrow(() -> new BookingException("No Trail found with " + name));
     }
 
-    public List<User> view() {
+    private void bookingRequestValidation(Trail trail, User[] users) {
+        if (users.length == 0) {
+            throw new BookingException("Users not found");
+        }
 
-        bookingRepo.findAll().forEach(b->{
-            System.out.println(b.toString());
+        Arrays.stream(users).forEach(u -> {
+            if (!(u.getAge() >= trail.getMinAge() && u.getAge() <= trail.getMaxAge())) {
+                logger.error("User age criteria is not match!");
+                throw new BookingException("User age criteria is not match!");
+            }
         });
-        return (List<User>)userRepository.findAll();
     }
 
-    public void view(LocalDate date) {
+    public Booking cancel(Long id) {
+        return bookingRepo.findById(id).map(booking -> {
+            booking.setStatus(0);
+            bookingRepo.save(booking);
+            return booking;
+        }).orElseThrow(() -> new BookingException("Booking not found with id " + id));
+    }
+
+    public List<User> viewUser(String name) {
+        return userRepository.findByName(name);
+    }
+
+    public Optional<User> viewUser(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<Booking> viewBookings(LocalDate date) {
+        return bookingRepo.findByDate(date);
+    }
+
+    public List<Booking> viewBookings(String name) {
+        return bookingRepo.findByTrailId(name);
+    }
+
+    public List<Booking> viewBookings() {
+        return bookingRepo.findAll();
+    }
+
+    public List<User> viewUser() {
+        return userRepository.findAll();
     }
 }

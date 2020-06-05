@@ -1,11 +1,13 @@
 package com.hiker.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue
@@ -14,14 +16,13 @@ public class User {
     private String name;
 
     private int age;
+    @JsonIgnoreProperties
     private Long bookingId;
 
-    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bookingId", nullable = true)
-    private List<Booking> bookings;
-
-    public User() {
-    }
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "bookingId", nullable = true, insertable = false, updatable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Booking booking;
 
     public Long getId() {
         return id;
@@ -55,11 +56,11 @@ public class User {
         this.bookingId = bookingId;
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

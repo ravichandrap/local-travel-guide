@@ -5,17 +5,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
-public class Trail {
+public class Trail implements Serializable {
 
     @Id
     @GeneratedValue
     private Long id;
     private String name;
+    //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSSXXX" )
     private LocalTime start;
+
+    //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSSXXX")
     private LocalTime end;
     private int minAge;
     private int maxAge;
@@ -30,15 +34,15 @@ public class Trail {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonFormat(pattern = "HH:mm:ss")
     public LocalTime getStart() {
         return start;
     }
@@ -47,7 +51,7 @@ public class Trail {
         this.start = start;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     public LocalTime getEnd() {
         return end;
     }
@@ -56,7 +60,7 @@ public class Trail {
         this.end = end;
     }
 
-       public double getPrice() {
+    public double getPrice() {
         return price;
     }
 
