@@ -1,4 +1,4 @@
-package com.hiker.exception;
+package com.travel.exception;
 
 public class BookingException extends RuntimeException {
 

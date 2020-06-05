@@ -1,4 +1,4 @@
-package com.hiker.exception;
+package com.travel.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

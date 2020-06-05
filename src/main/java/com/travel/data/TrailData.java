@@ -1,7 +1,7 @@
-package com.hiker.data;
+package com.travel.data;
 
-import com.hiker.entity.Trail;
-import com.hiker.repository.TrailRepository;
+import com.travel.repository.TrailRepository;
+import com.travel.entity.Trail;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

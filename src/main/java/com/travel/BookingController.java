@@ -1,9 +1,9 @@
-package com.hiker;
+package com.travel;
 
-import com.hiker.entity.Booking;
-import com.hiker.entity.User;
-import com.hiker.exception.BookingException;
-import com.hiker.repository.BookingService;
+import com.travel.entity.Booking;
+import com.travel.entity.User;
+import com.travel.exception.BookingException;
+import com.travel.repository.BookingService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

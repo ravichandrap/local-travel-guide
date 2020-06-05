@@ -1,10 +1,10 @@
-package com.hiker.repository;
+package com.travel.repository;
 
-import com.hiker.BookingRequest;
-import com.hiker.entity.Booking;
-import com.hiker.entity.Trail;
-import com.hiker.entity.User;
-import com.hiker.exception.BookingException;
+import com.travel.BookingRequest;
+import com.travel.entity.Booking;
+import com.travel.entity.Trail;
+import com.travel.entity.User;
+import com.travel.exception.BookingException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

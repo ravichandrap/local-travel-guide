@@ -1,4 +1,4 @@
-package com.hiker.exception;
+package com.travel.exception;
 
 //@ResponseStatus(HttpStatus.NOT_FOUND)
 public class BeanNotFoundException extends RuntimeException {

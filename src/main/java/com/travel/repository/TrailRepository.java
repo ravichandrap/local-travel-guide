@@ -1,6 +1,6 @@
-package com.hiker.repository;
+package com.travel.repository;
 
-import com.hiker.entity.Trail;
+import com.travel.entity.Trail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

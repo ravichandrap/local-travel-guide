@@ -1,4 +1,4 @@
-package com.hiker.entity;
+package com.travel.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

@@ -1,4 +1,4 @@
-package com.hiker.exception;
+package com.travel.exception;
 
 import java.util.Date;
 

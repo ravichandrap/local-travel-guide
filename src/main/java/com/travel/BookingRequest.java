@@ -1,6 +1,6 @@
-package com.hiker;
+package com.travel;
 
-import com.hiker.entity.User;
+import com.travel.entity.User;
 
 import java.time.LocalDate;
 
