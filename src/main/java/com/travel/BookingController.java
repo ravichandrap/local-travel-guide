@@ -1,5 +1,6 @@
 package com.travel;
 
+
 import com.travel.entity.Booking;
 import com.travel.entity.User;
 import com.travel.exception.BookingException;
@@ -15,9 +16,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("booking")
 public class BookingController {
     static final Logger logger = Logger.getLogger(BookingController.class);
 
@@ -63,6 +63,7 @@ public class BookingController {
 
     @GetMapping
     public List<Booking> viewBookings() {
+//        return service.viewBookings().stream().map(b -> b.add(linkTo(methodOn(BookingController.class).viewBookings(b.getDate())).withRel("Date"))).collect(Collectors.toList());
         return service.viewBookings();
     }
 }

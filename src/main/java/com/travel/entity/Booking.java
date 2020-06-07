@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-public class Booking implements Serializable {
+public class Booking  implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
